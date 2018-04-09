@@ -1,0 +1,5 @@
+FROM ubuntu:17.10
+MAINTAINER Ilya Gavrilov <gilyav@gmail.com>
+
+RUN apt-get update && apt-get install -y software-properties-common && add-apt-repository ppa:bitcoin/bitcoin && apt-get update && apt-get install -y bitcoind && apt-get install -y git autoconf automake build-essential git libtool libgmp-dev libsqlite3-dev python python3 net-tools libsodium-dev && git clone https://github.com/ElementsProject/lightning && cd lightning && make && make install && cd .. && rm -rf /lightning
+CMD bitcoind -regtest -daemon -connect=172.17.0.1 && lightningd --network=regtest --log-level=debug --log-file=/lightningd.log

@@ -352,7 +352,7 @@ static void do_one_estimatefee(struct bitcoind *bitcoind,
 
 	sprintf(blockstr, "%u", efee->blocks[efee->i]);
 	start_bitcoin_cli(bitcoind, NULL, process_estimatefee, false, NULL, efee,
-			  "estimatesmartfee", blockstr, efee->estmode[efee->i],
+			  "estimatesmartfee", blockstr,
 			  NULL);
 }
 

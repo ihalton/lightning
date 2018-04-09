@@ -462,7 +462,23 @@ static struct block *new_block(struct chain_topology *topo,
 {
 	struct block *b = tal(topo, struct block);
 
-	sha256_double(&b->blkid.shad, &blk->hdr, sizeof(blk->hdr));
+	//sha256_double(&b->blkid.shad, &blk->hdr, sizeof(blk->hdr));
+	struct sha256 *sha = &b->blkid.shad.sha;
+	struct sha256_ctx ctx;
+	sha256_init(&ctx);
+
+	sha256_update(&ctx, &blk->hdr, sizeof(blk->hdr));
+
+	uint8_t x = blk->ch_block_sig_len;
+	sha256_update(&ctx, &x, sizeof(x));
+	sha256_update(&ctx, blk->ch_block_sig, x);
+
+	sha256_done(&ctx, sha);
+
+	sha256_init(&ctx);
+	sha256_update(&ctx, sha, sizeof(struct sha256));
+	sha256_done(&ctx, sha);
+
 	log_debug(topo->log, "Adding block %u: %s",
 		  height,
 		  type_to_string(tmpctx, struct bitcoin_blkid, &b->blkid));

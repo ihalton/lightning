@@ -26,6 +26,11 @@ struct bitcoin_block *bitcoin_block_from_hex(const tal_t *ctx,
 		return tal_free(b);
 
 	pull(&p, &len, &b->hdr, sizeof(b->hdr));
+
+	b->ch_block_sig_len = pull_varint(&p, &len);
+
+	pull(&p, &len, b->ch_block_sig, b->ch_block_sig_len);
+
 	num = pull_varint(&p, &len);
 	b->tx = tal_arr(b, struct bitcoin_tx *, num);
 	for (i = 0; i < num; i++)

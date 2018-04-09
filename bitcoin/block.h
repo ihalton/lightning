@@ -18,10 +18,16 @@ struct bitcoin_block_hdr {
 	le32 timestamp;
 	le32 target;
 	le32 nonce;
+	struct sha256_double hash_state_root; // moore
+	struct sha256_double hash_utxo_root; // moore
+	struct sha256_double prevout_stake_hash; // moore
+	le32 prevout_stake_int; // moore
 };
 
 struct bitcoin_block {
 	struct bitcoin_block_hdr hdr;
+	char ch_block_sig[33+33+6];
+	u8 ch_block_sig_len;
 	/* tal_count shows now many */
 	struct bitcoin_tx **tx;
 };
